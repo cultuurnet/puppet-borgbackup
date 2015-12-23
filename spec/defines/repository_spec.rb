@@ -13,14 +13,16 @@ describe 'borgbackup::repository' do
         context "without any parameters" do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_borgbackup__repository('backup').only_with(
-            :path => 'backup',
-	    :encryption => 'none'
+            :path       => 'backup',
+	    :encryption => 'none',
+	    :borg_rsh   => 'ssh'
 	  ) }
 
           it { is_expected.to contain_exec('borg init backup').with(
-            :path    => ['/usr/bin', '/usr/local/bin'],
-            :command => 'borg init --encryption none backup',
-	    :unless  => 'borg list backup'
+            :path        => ['/usr/bin', '/usr/local/bin'],
+	    :environment => 'BORG_RSH=ssh',
+            :command     => 'borg init --encryption none backup',
+	    :unless      => 'borg list backup'
 	  ) }
         end
 
@@ -29,14 +31,18 @@ describe 'borgbackup::repository' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_borgbackup__repository('/mnt/backup').only_with(
-            :path => '/mnt/backup',
-	    :encryption => 'none'
+            :path       => '/mnt/backup',
+	    :encryption => 'none',
+	    :borg_rsh   => 'ssh'
 	  ) }
 
+	  it { pp catalogue.resources }
+
           it { is_expected.to contain_exec('borg init /mnt/backup').with(
-            :path    => ['/usr/bin', '/usr/local/bin'],
-            :command => 'borg init --encryption none /mnt/backup',
-	    :unless  => 'borg list /mnt/backup'
+            :path        => ['/usr/bin', '/usr/local/bin'],
+	    :environment => 'BORG_RSH=ssh',
+            :command     => 'borg init --encryption none /mnt/backup',
+	    :unless      => 'borg list /mnt/backup'
 	  ) }
         end
 
@@ -46,12 +52,12 @@ describe 'borgbackup::repository' do
           it { expect { catalogue }.to raise_error(Puppet::Error, /value foo not allowed for parameter encryption/) }
         end
 
-        context "with encryption => repokey, passphrase => secret and path => /mnt/backup" do
-	  let(:params) { { :encryption => 'repokey', :passphrase => 'secret', :path => '/mnt/backup' } }
+        context "with encryption => repokey, passphrase => secret, borg_rsh => ssh -i /tmp/privkey.pem and path => /mnt/backup" do
+	  let(:params) { { :encryption => 'repokey', :passphrase => 'secret', :borg_rsh => 'ssh -i /tmp/privkey.pem', :path => '/mnt/backup' } }
 
           it { is_expected.to contain_exec('borg init backup').with(
             :path        => ['/usr/bin', '/usr/local/bin'],
-	    :environment => 'BORG_PASSPHRASE=secret',
+	    :environment => [ 'BORG_PASSPHRASE=secret', 'BORG_RSH=ssh -i /tmp/privkey.pem'],
             :command     => 'borg init --encryption repokey /mnt/backup',
 	    :unless      => 'borg list /mnt/backup'
 	  ) }
@@ -84,5 +90,4 @@ describe 'borgbackup::repository' do
       it { expect { catalogue }.to raise_error(Puppet::Error, /Ubuntu 12.04 not supported/) }
     end
   end
-
 end
