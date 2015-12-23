@@ -1,0 +1,24 @@
+{
+  "name": "cultuurnet-borgbackup",
+  "version": "0.1.0",
+  "author": "cultuurnet",
+  "summary": "Installs and configures Borgbackup",
+  "license": "Apache 2.0",
+  "source": "https://github.com/cultuurnet/puppet-borgbackup.git",
+  "project_page": "https://github.com/cultuurnet/puppet-borgbackup",
+  "issues_url": "https://github.com/cultuurnet/puppet-borgbackup/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04"
+      ]
+    }
+  ]
+}
