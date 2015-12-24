@@ -20,4 +20,6 @@ class borgbackup (
   }
 
   create_resources('borgbackup::repository', $repositories)
+
+  Class['borgbackup::install'] -> Borgbackup::Repository <| |>
 }
