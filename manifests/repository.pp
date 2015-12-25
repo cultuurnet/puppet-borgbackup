@@ -1,5 +1,5 @@
 define borgbackup::repository(
-  $path       = $title,
+  $repository = $title,
   $encryption = 'none',
   $passphrase = undef,
   $borg_rsh   = 'ssh'
@@ -22,8 +22,8 @@ define borgbackup::repository(
       exec { "borg init ${title}":
         path        => [ '/usr/bin', '/usr/local/bin'],
         environment => $exec_env,
-        command     => "borg init --encryption ${encryption} ${path}",
-        unless      => "borg list ${path}"
+        command     => "borg init --encryption ${encryption} ${repository}",
+        unless      => "borg list ${repository}"
       }
     }
     default: {

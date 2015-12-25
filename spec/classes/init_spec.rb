@@ -23,11 +23,11 @@ describe 'borgbackup' do
           it { is_expected.to contain_class('borgbackup::install').with_package_name('foobar') }
 	end
 
-	context "with repositories => { 'backup' => { 'path' => '/mnt/backup' } }" do
-          let(:params) { { :repositories => { 'backup' => { 'path' => '/mnt/backup' } } } }
+	context "with repositories => { 'backup' => { 'repository' => '/mnt/backup' } }" do
+          let(:params) { { :repositories => { 'backup' => { 'repository' => '/mnt/backup' } } } }
 
 	  it { is_expected.to have_borgbackup__repository_resource_count(1) }
-	  it { is_expected.to contain_borgbackup__repository('backup').with_path('/mnt/backup') }
+	  it { is_expected.to contain_borgbackup__repository('backup').with_repository('/mnt/backup') }
 	end
       end
     end

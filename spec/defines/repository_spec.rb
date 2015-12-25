@@ -13,7 +13,7 @@ describe 'borgbackup::repository' do
         context "without any parameters" do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_borgbackup__repository('backup').only_with(
-            :path       => 'backup',
+            :repository => 'backup',
 	    :encryption => 'none',
 	    :borg_rsh   => 'ssh'
 	  ) }
@@ -31,12 +31,10 @@ describe 'borgbackup::repository' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_borgbackup__repository('/mnt/backup').only_with(
-            :path       => '/mnt/backup',
+            :repository => '/mnt/backup',
 	    :encryption => 'none',
 	    :borg_rsh   => 'ssh'
 	  ) }
-
-	  it { pp catalogue.resources }
 
           it { is_expected.to contain_exec('borg init /mnt/backup').with(
             :path        => ['/usr/bin', '/usr/local/bin'],
@@ -52,8 +50,8 @@ describe 'borgbackup::repository' do
           it { expect { catalogue }.to raise_error(Puppet::Error, /value foo not allowed for parameter encryption/) }
         end
 
-        context "with encryption => repokey, passphrase => secret, borg_rsh => ssh -i /tmp/privkey.pem and path => /mnt/backup" do
-	  let(:params) { { :encryption => 'repokey', :passphrase => 'secret', :borg_rsh => 'ssh -i /tmp/privkey.pem', :path => '/mnt/backup' } }
+        context "with encryption => repokey, passphrase => secret, borg_rsh => ssh -i /tmp/privkey.pem and repository => /mnt/backup" do
+	  let(:params) { { :encryption => 'repokey', :passphrase => 'secret', :borg_rsh => 'ssh -i /tmp/privkey.pem', :repository => '/mnt/backup' } }
 
           it { is_expected.to contain_exec('borg init backup').with(
             :path        => ['/usr/bin', '/usr/local/bin'],
