@@ -6,7 +6,7 @@ define borgbackup::configuration(
   $passphrase    = undef,
   $excludes      = [],
   $job_schedule  = {},
-  $job_verbosity = '0',
+  $job_verbosity = '1',
   $job_mailto    = '',
   $borg_rsh      = 'ssh',
   $options       = {
