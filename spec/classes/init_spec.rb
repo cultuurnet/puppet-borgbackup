@@ -13,22 +13,49 @@ describe 'borgbackup' do
 
           it { is_expected.to contain_class('borgbackup') }
           it { is_expected.to contain_class('borgbackup::params') }
-          it { is_expected.to contain_class('borgbackup::install').with_package_name('python3-borgbackup') }
-	  it { is_expected.to have_borgbackup__repository_resource_count(0) }
+          it { is_expected.to contain_class('borgbackup::install').with_package_name([ 'python3-borgbackup', 'python3-atticmatic']) }
+          it { is_expected.to contain_class('borgbackup::config') }
+	        it { is_expected.to have_borgbackup__configuration_resource_count(0) }
         end
 
-	context "with package_name => foobar" do
+	      context "with package_name => foobar" do
           let(:params) { { :package_name => 'foobar' } }
 
           it { is_expected.to contain_class('borgbackup::install').with_package_name('foobar') }
-	end
+	      end
 
-	context "with repositories => { 'backup' => { 'repository' => '/mnt/backup' } }" do
-          let(:params) { { :repositories => { 'backup' => { 'repository' => '/mnt/backup' } } } }
+	      context "with configurations => { 'filesystem' => { 'source_directories' => '/home', 'repository' => '/var/backups', 'encryption' => 'none' } }" do
+          let(:params) do
+            { :configurations => { 'filesystem' => { 'source_directories' => '/home', 'repository' => '/var/backups', 'encryption' => 'none' } } }
+          end
 
-	  it { is_expected.to have_borgbackup__repository_resource_count(1) }
-	  it { is_expected.to contain_borgbackup__repository('backup').with_repository('/mnt/backup') }
-	end
+	        it { is_expected.to have_borgbackup__configuration_resource_count(1) }
+	        it { is_expected.to contain_borgbackup__configuration('filesystem').with(
+            'source_directories' => '/home',
+            'repository'         => '/var/backups',
+            'encryption'         => 'none'
+          ) }
+	      end
+
+	      context "with configurations => { 'filesystem' => { 'source_directories' => '/home', 'repository' => '/var/backups'}, 'database' => { 'source_directories' => '/var/lib/mysql', 'repository' => '/var/db_backups' } }" do
+          let(:params) do
+            { :configurations =>
+              { 'filesystem' => { 'source_directories' => '/home', 'repository' => '/var/backups' },
+                'database' => { 'source_directories' => '/var/lib/mysql', 'repository' => '/var/db_backups' }
+              }
+            }
+          end
+
+	        it { is_expected.to have_borgbackup__configuration_resource_count(2) }
+	        it { is_expected.to contain_borgbackup__configuration('filesystem').with(
+            'source_directories' => '/home',
+            'repository'         => '/var/backups'
+          ) }
+	        it { is_expected.to contain_borgbackup__configuration('database').with(
+            'source_directories' => '/var/lib/mysql',
+            'repository'         => '/var/db_backups'
+          ) }
+	      end
       end
     end
   end

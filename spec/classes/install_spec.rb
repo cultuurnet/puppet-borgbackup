@@ -6,10 +6,11 @@ describe 'borgbackup::install' do
     it { is_expected.to have_package_resource_count(0) }
   end
 
-  context "with package_name => 'python3-borgbackup'" do
-    let (:params) { { :package_name => 'python3-borgbackup' } }
+  context "with package_name => [ 'python3-borgbackup', 'python3-atticmatic']" do
+    let (:params) { { :package_name => [ 'python3-borgbackup', 'python3-atticmatic'] } }
 
     it { is_expected.to contain_package('python3-borgbackup').with_ensure('present') }
+    it { is_expected.to contain_package('python3-atticmatic').with_ensure('present') }
   end
 
   context "with package_name => 'borgbackup'" do

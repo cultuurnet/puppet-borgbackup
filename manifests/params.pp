@@ -8,7 +8,7 @@ class borgbackup::params {
     'Ubuntu': {
       case $::operatingsystemrelease {
         '14.04': {
-          $package_name = 'python3-borgbackup'
+          $package_name = [ 'python3-borgbackup', 'python3-atticmatic' ]
         }
         default: {
           fail("Ubuntu ${::operatingsystemrelease} not supported")
