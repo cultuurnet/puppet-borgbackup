@@ -34,7 +34,7 @@ describe 'borgbackup::configuration' do
 	          :type               => 'borg',
 	          :excludes           => [],
             :job_schedule       => {},
-	          :job_verbosity      => '0',
+	          :job_verbosity      => '1',
 	          :borg_rsh           => 'ssh'
 	        ) }
 
@@ -115,8 +115,7 @@ describe 'borgbackup::configuration' do
                 'keep_monthly' => '3',
                 'keep_yearly'  => '1',
                 'prefix'       => 'foo',
-                'checks'       => 'archives',
-                'check_last'   => '3'
+                'checks'       => 'archives'
               }
 	          } ) }
 
@@ -133,7 +132,7 @@ describe 'borgbackup::configuration' do
             ) }
 
             it { is_expected.to contain_file('/etc/atticmatic/config.filesystem').with_content(
-              /\[consistency\]\nchecks: archives\ncheck_last: 3/
+              /\[consistency\]\nchecks: archives\ncheck_last: 1/
             ) }
 	        end
 

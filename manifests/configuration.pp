@@ -70,6 +70,20 @@ define borgbackup::configuration(
     mode   => '0644'
   }
 
+  $default_options = {
+    'compression'  => 'none',
+    'keep_within'  => undef,
+    'keep_hourly'  => undef,
+    'keep_daily'   => undef,
+    'keep_weekly'  => undef,
+    'keep_monthly' => undef,
+    'keep_yearly'  => undef,
+    'prefix'       => undef,
+    'checks'       => [ 'repository', 'archives'],
+    'check_last'   => '1'
+  }
+  $_options = merge($default_options, $options)
+
   file { "${conf_dir}/config.${title}":
     content => template('borgbackup/config.erb')
   }

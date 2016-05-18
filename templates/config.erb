@@ -6,35 +6,35 @@ repository: <%= @repository %>
 <%- if @passphrase -%>
 encryption_passphrase: <%= @passphrase %>
 <%- end -%>
-compression: <%= @options['compression'] %>
+compression: <%= @_options['compression'] %>
 
 [retention]
-<%- unless @options['keep_within'] == :undef || ! @options['keep_within'] -%>
-keep_within: <%= @options['keep_within'] %>
+<%- unless @_options['keep_within'] == :undef || ! @_options['keep_within'] -%>
+keep_within: <%= @_options['keep_within'] %>
 <%- end -%>
-<%- unless @options['keep_hourly'] == :undef || ! @options['keep_hourly'] -%>
-keep_hourly: <%= @options['keep_hourly'] %>
+<%- unless @_options['keep_hourly'] == :undef || ! @_options['keep_hourly'] -%>
+keep_hourly: <%= @_options['keep_hourly'] %>
 <%- end -%>
-<%- unless @options['keep_daily'] == :undef || ! @options['keep_daily'] -%>
-keep_daily: <%= @options['keep_daily'] %>
+<%- unless @_options['keep_daily'] == :undef || ! @_options['keep_daily'] -%>
+keep_daily: <%= @_options['keep_daily'] %>
 <%- end -%>
-<%- unless @options['keep_weekly'] == :undef || ! @options['keep_weekly'] -%>
-keep_weekly: <%= @options['keep_weekly'] %>
+<%- unless @_options['keep_weekly'] == :undef || ! @_options['keep_weekly'] -%>
+keep_weekly: <%= @_options['keep_weekly'] %>
 <%- end -%>
-<%- unless @options['keep_monthly'] == :undef || ! @options['keep_monthly'] -%>
-keep_monthly: <%= @options['keep_monthly'] %>
+<%- unless @_options['keep_monthly'] == :undef || ! @_options['keep_monthly'] -%>
+keep_monthly: <%= @_options['keep_monthly'] %>
 <%- end -%>
-<%- unless @options['keep_yearly'] == :undef || ! @options['keep_yearly'] -%>
-keep_yearly: <%= @options['keep_yearly'] %>
+<%- unless @_options['keep_yearly'] == :undef || ! @_options['keep_yearly'] -%>
+keep_yearly: <%= @_options['keep_yearly'] %>
 <%- end -%>
-<%- unless @options['prefix'] == :undef || ! @options['prefix'] -%>
-prefix: <%= @options['prefix'] %>
+<%- unless @_options['prefix'] == :undef || ! @_options['prefix'] -%>
+prefix: <%= @_options['prefix'] %>
 <%- end -%>
 
 [consistency]
-<%- unless @options['checks'] == :undef || ! @options['checks'] -%>
-checks: <%= Array(@options['checks']).join(' ') %>
+<%- unless @_options['checks'] == :undef || ! @_options['checks'] -%>
+checks: <%= Array(@_options['checks']).join(' ') %>
 <%- end -%>
-<%- unless @options['check_last'] == :undef || ! @options['check_last'] -%>
-check_last: <%= @options['check_last'] %>
+<%- unless @_options['check_last'] == :undef || ! @_options['check_last'] -%>
+check_last: <%= @_options['check_last'] %>
 <%- end -%>
