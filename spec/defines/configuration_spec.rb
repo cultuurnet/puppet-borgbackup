@@ -32,6 +32,7 @@ describe 'borgbackup::configuration' do
 	          :repository         => '/mnt/backup',
             :encryption         => 'none',
 	          :type               => 'borg',
+            :timeout            => '5',
 	          :excludes           => [],
             :job_schedule       => {},
 	          :job_verbosity      => '1',
@@ -41,8 +42,8 @@ describe 'borgbackup::configuration' do
           it { is_expected.to contain_exec('borg init filesystem').with(
             :path        => ['/usr/bin', '/usr/local/bin'],
             :environment => [ 'BORG_RSH=ssh'],
-            :command     => 'borg init --encryption none /mnt/backup',
-            :unless      => 'borg list /mnt/backup'
+            :command     => 'borg init --encryption none --lock-wait 5 /mnt/backup',
+            :unless      => 'borg list --lock-wait 5 /mnt/backup'
           ) }
 
 	        it { is_expected.to contain_file('/etc/borgmatic/config.filesystem').with(
@@ -78,14 +79,14 @@ describe 'borgbackup::configuration' do
             it { expect { catalogue }.to raise_error(Puppet::Error, /value foo not allowed for parameter encryption/) }
           end
 
-          context "with encryption => repokey, passphrase => secret and borg_rsh => ssh -i /tmp/privkey.pem" do
-            let(:params) { default_params.merge({ :encryption => 'repokey', :passphrase => 'secret', :borg_rsh => 'ssh -i /tmp/privkey.pem' }) }
+          context "with encryption => repokey, timeout => 7, passphrase => secret and borg_rsh => ssh -i /tmp/privkey.pem" do
+            let(:params) { default_params.merge({ :encryption => 'repokey', :timeout => '7', :passphrase => 'secret', :borg_rsh => 'ssh -i /tmp/privkey.pem' }) }
 
             it { is_expected.to contain_exec('borg init filesystem').with(
               :path        => ['/usr/bin', '/usr/local/bin'],
               :environment => [ 'BORG_PASSPHRASE=secret', 'BORG_RSH=ssh -i /tmp/privkey.pem'],
-              :command     => 'borg init --encryption repokey /mnt/backup',
-              :unless      => 'borg list /mnt/backup'
+              :command     => 'borg init --encryption repokey --lock-wait 7 /mnt/backup',
+              :unless      => 'borg list --lock-wait 7 /mnt/backup'
             ) }
           end
 

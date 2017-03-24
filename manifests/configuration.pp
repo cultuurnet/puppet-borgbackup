@@ -9,6 +9,7 @@ define borgbackup::configuration(
   $job_verbosity = '1',
   $job_mailto    = '',
   $borg_rsh      = 'ssh',
+  $timeout       = '5',
   $options       = {
     'compression'           => 'none',
     'keep_within'           => undef,
@@ -54,8 +55,8 @@ define borgbackup::configuration(
       exec { "borg init ${title}":
         path        => [ '/usr/bin', '/usr/local/bin'],
         environment => $exec_env,
-        command     => "borg init --encryption ${encryption} ${repository}",
-        unless      => "borg list ${repository}"
+        command     => "borg init --encryption ${encryption} --lock-wait ${timeout} ${repository}",
+        unless      => "borg list --lock-wait ${timeout} ${repository}"
       }
     }
     default: {
