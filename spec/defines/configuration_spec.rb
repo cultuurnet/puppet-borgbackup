@@ -85,6 +85,7 @@ describe 'borgbackup::configuration' do
             it { is_expected.to contain_exec('borg init filesystem').with(
               :path        => ['/usr/bin', '/usr/local/bin'],
               :environment => [ 'BORG_PASSPHRASE=secret', 'BORG_RSH=ssh -i /tmp/privkey.pem'],
+              :returns     => [ 0, 2],
               :command     => 'borg init --encryption repokey --lock-wait 7 /mnt/backup',
               :unless      => 'borg list --lock-wait 7 /mnt/backup'
             ) }

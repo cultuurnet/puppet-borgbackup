@@ -55,6 +55,7 @@ define borgbackup::configuration(
       exec { "borg init ${title}":
         path        => [ '/usr/bin', '/usr/local/bin'],
         environment => $exec_env,
+        returns     => [ 0, 2],
         command     => "borg init --encryption ${encryption} --lock-wait ${timeout} ${repository}",
         unless      => "borg list --lock-wait ${timeout} ${repository}"
       }
