@@ -10,6 +10,66 @@ describe 'borgbackup::configuration' do
 	        facts
 	      end
 
+        context "with ensure => absent" do
+          let(:params) { { :ensure => 'absent' } }
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_borgbackup__configuration('filesystem').with(
+            :ensure             => 'absent',
+            :encryption         => 'none',
+            :type               => 'borg',
+            :timeout            => '5',
+            :excludes           => [],
+            :job_schedule       => {},
+            :job_verbosity      => '1',
+            :borg_rsh           => 'ssh'
+	        ) }
+
+          it { is_expected.to contain_file('/etc/borgmatic/config.filesystem').with(
+            :ensure => 'absent'
+          ) }
+
+          it { is_expected.to contain_file('/etc/borgmatic/excludes.filesystem').with(
+            :ensure => 'absent'
+          ) }
+
+          it { is_expected.to contain_cron('borgbackup::configuration::filesystem').with(
+            :ensure => 'absent'
+          ) }
+
+          it { is_expected.to_not contain_exec('borg init filesystem') }
+
+          context "with type => attic" do
+            let(:params) { { :ensure => 'absent', :type => 'attic' } }
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_borgbackup__configuration('filesystem').with(
+              :ensure             => 'absent',
+              :encryption         => 'none',
+              :type               => 'attic',
+              :timeout            => '5',
+              :excludes           => [],
+              :job_schedule       => {},
+              :job_verbosity      => '1',
+              :borg_rsh           => 'ssh'
+            ) }
+
+            it { is_expected.to contain_file('/etc/atticmatic/config.filesystem').with(
+              :ensure => 'absent'
+            ) }
+
+            it { is_expected.to contain_file('/etc/atticmatic/excludes.filesystem').with(
+              :ensure => 'absent'
+            ) }
+
+            it { is_expected.to contain_cron('borgbackup::configuration::filesystem').with(
+              :ensure => 'absent'
+            ) }
+
+            it { is_expected.to_not contain_exec('borg init filesystem') }
+          end
+        end
+
         context "without any parameters" do
 	        let(:params) { { } }
 
@@ -70,7 +130,7 @@ describe 'borgbackup::configuration' do
 	        ) }
 
 	        it { is_expected.to contain_file('/etc/borgmatic/excludes.filesystem') }
-	        it { is_expected.to_not contain_cron('borgmatic::configuration::filesystem') }
+	        it { is_expected.to_not contain_cron('borgbackup::configuration::filesystem') }
 
 
           context "with encryption => foo" do
@@ -146,7 +206,7 @@ describe 'borgbackup::configuration' do
 	            }
 	          ) }
 
-	          it { is_expected.to_not contain_cron('atticmatic::configuration::filesystem') }
+	          it { is_expected.to_not contain_cron('borgbackup::configuration::filesystem') }
 
 	          it { is_expected.to contain_file('/etc/atticmatic/config.filesystem').with(
 	            :ensure => 'file',
