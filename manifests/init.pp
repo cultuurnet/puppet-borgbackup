@@ -25,7 +25,9 @@ class borgbackup (
     borgbackup::configuration { $name:
       * => $configuration
     }
+
+    Class['borgbackup::config'] -> Borgbackup::Configuration[$name]
   }
 
-  Class['borgbackup::install'] -> Class['borgbackup::config'] -> Borgbackup::Configuration <| |>
+  Class['borgbackup::install'] -> Class['borgbackup::config'] -> Class['borgbackup']
 }
