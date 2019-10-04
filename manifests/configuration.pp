@@ -64,10 +64,14 @@ define borgbackup::configuration(
 
     if $passphrase {
       $pass = "BORG_PASSPHRASE=${passphrase}"
+    } else {
+      $pass = undef
     }
 
     if $borg_rsh {
       $rsh = "BORG_RSH=${borg_rsh}"
+    } else {
+      $rsh = undef
     }
 
     $exec_env = delete_undef_values([ $pass, $rsh])
