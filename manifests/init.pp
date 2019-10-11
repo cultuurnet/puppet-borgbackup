@@ -15,11 +15,8 @@ class borgbackup (
   $configurations = {}
 ) inherits ::borgbackup::params {
 
-  class { borgbackup::install:
-    package_name => $package_name
-  }
-
-  class { borgbackup::config: }
+  contain borgbackup::install
+  contain borgbackup::config
 
   $configurations.each | $name, $configuration| {
     borgbackup::configuration { $name:
