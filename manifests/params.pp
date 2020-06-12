@@ -9,6 +9,11 @@ class borgbackup::params {
       case $::operatingsystemrelease {
         '14.04': {
           $package_name = [ 'python3-borgbackup', 'python3-atticmatic' ]
+          $configuration_directories = [ '/etc/atticmatic', '/etc/borgmatic']
+        }
+        '16.04': {
+          $package_name = [ 'borgbackup', 'python3-borgmatic' ]
+          $configuration_directories = '/etc/borgmatic'
         }
         default: {
           fail("Ubuntu ${::operatingsystemrelease} not supported")

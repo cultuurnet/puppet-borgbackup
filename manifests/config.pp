@@ -4,7 +4,7 @@
 #
 class borgbackup::config
 {
-  file { [ '/etc/atticmatic', '/etc/borgmatic']:
+  file { $configuration_directories:
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
