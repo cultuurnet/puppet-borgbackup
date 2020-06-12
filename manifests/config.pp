@@ -2,9 +2,8 @@
 #
 # This class is called from borgbackup for config.
 #
-class borgbackup::config
-{
-  file { $configuration_directories:
+class borgbackup::config inherits ::borgbackup::params {
+  file { $::borgbackup::params::configuration_directories:
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
