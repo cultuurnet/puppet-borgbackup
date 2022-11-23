@@ -15,6 +15,10 @@ class borgbackup::params {
           $package_name = [ 'borgbackup', 'python3-borgmatic' ]
           $configuration_directories = '/etc/borgmatic'
         }
+        '20.04': {
+          $package_name = [ 'borgbackup', 'borgmatic' ]
+          $configuration_directories = '/etc/borgmatic'
+        }
         default: {
           fail("Ubuntu ${::operatingsystemrelease} not supported")
         }
