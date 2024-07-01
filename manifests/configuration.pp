@@ -30,11 +30,11 @@ define borgbackup::configuration(
   case $type {
     'attic': {
       $conf_dir = '/etc/atticmatic'
-      $command  = '/usr/local/bin/atticmatic'
+      $command  = '/usr/bin/atticmatic'
     }
     'borg': {
       $conf_dir = '/etc/borgmatic'
-      $command  = '/usr/local/bin/borgmatic'
+      $command  = '/usr/bin/borgmatic'
     }
     default: {
       fail("value ${type} not allowed for parameter type")
