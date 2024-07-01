@@ -237,7 +237,7 @@ describe 'borgbackup::configuration' do
 	          it { is_expected.to contain_cron('borgbackup::configuration::filesystem').with(
               :user        => 'root',
 	            :environment => ['MAILTO=', 'PATH=/usr/bin:/bin:/usr/local/bin', 'BORG_RSH="ssh -i /tmp/privkey.pem"'],
-	            :command     => '/usr/local/bin/borgmatic --config /etc/borgmatic/config.filesystem --excludes /etc/borgmatic/excludes.filesystem -v 1 > /tmp/borgbackup.log 2>&1 || cat /tmp/borgbackup.log',
+	            :command     => '/usr/bin/borgmatic --config /etc/borgmatic/config.filesystem --excludes /etc/borgmatic/excludes.filesystem -v 1 > /tmp/borgbackup.log 2>&1 || cat /tmp/borgbackup.log',
 	            :hour        => '*',
 	            :minute      => '10',
 	            :weekday     => '*'
@@ -271,7 +271,7 @@ describe 'borgbackup::configuration' do
 	          it { is_expected.to contain_cron('borgbackup::configuration::filesystem').with(
               :user        => 'root',
 	            :environment => ['MAILTO=root@localhost', 'PATH=/usr/bin:/bin:/usr/local/bin', 'BORG_RSH="ssh"'],
-	            :command     => '/usr/local/bin/borgmatic --config /etc/borgmatic/config.filesystem --excludes /etc/borgmatic/excludes.filesystem -v 2 > /tmp/borgbackup.log 2>&1 || cat /tmp/borgbackup.log',
+	            :command     => '/usr/bin/borgmatic --config /etc/borgmatic/config.filesystem --excludes /etc/borgmatic/excludes.filesystem -v 2 > /tmp/borgbackup.log 2>&1 || cat /tmp/borgbackup.log',
 	            :hour        => '3',
 	            :minute      => '15',
 	            :weekday     => '4',
