@@ -23,6 +23,75 @@ If your module has a range of functionality (installation, configuration, manage
 
 ## Setup
 
+### Hiera config example
+```
+profiles::backup::client::configurations:
+  'mysql':
+    source_directories: '/data/backup/mysql/archive'
+    exclude_patterns:
+      - '*lost+found*'
+    job_schedule:
+      minute: '05'
+      hour:
+        - '8'
+        - '14'
+  'randomdatadir':
+    source_directories: '/data/vhosts'
+    job_schedule:
+      minute: '10'
+      hour:
+        - '8'
+        - '14'
+```
+
+The above config snippet will result in two config files in `/etc/borgmatic` that look like this.
+```
+/etc/borgmatic/config.mysql 
+
+location:
+  source_directories:
+    - /data/backup/mysql/archive
+  repositories:
+    - borgbackup@backup.services.publiq.be:/data/borgbackup/34eb5de83e01-mysql
+  exclude_patterns:
+    - *lost+found*
+storage:
+  compression: zlib,9
+retention:
+  keep_within: 24H
+  keep_daily: 7
+  keep_weekly: 5
+  keep_monthly: 2
+consistency:
+  checks:
+    - repository
+    - archives
+  check_last: 1
+```
+
+```
+/etc/borgmatic/config.randomdatadir 
+
+location:
+  source_directories:
+    - /data/vhosts
+  repositories:
+    - borgbackup@backup.services.publiq.be:/data/borgbackup/34eb5de83e01-randomdatadir
+  exclude_patterns:
+storage:
+  compression: zlib,9
+retention:
+  keep_within: 24H
+  keep_daily: 7
+  keep_weekly: 5
+  keep_monthly: 2
+consistency:
+  checks:
+    - repository
+    - archives
+  check_last: 1
+```
+
 ### What borgbackup affects
 
 * A list of files, packages, services, or operations that the module will alter, impact, or execute on the system it's installed on.
