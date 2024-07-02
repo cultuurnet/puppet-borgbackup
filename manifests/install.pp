@@ -6,9 +6,7 @@ class borgbackup::install(
   $package_name = $::borgbackup::package_name
 ) {
 
-  if $package_name {
-    package { $package_name:
-      ensure => present,
-    }
+  $package_name.each |$package| {
+    realize Package[$package]
   }
 }
