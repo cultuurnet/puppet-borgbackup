@@ -5,7 +5,7 @@ define borgbackup::configuration(
   $type               = 'borg',
   $encryption         = 'none',
   $passphrase         = undef,
-  $excludes           = [],
+  $exclude_patterns   = [],
   $job_schedule       = {},
   $job_verbosity      = '1',
   $job_mailto         = '',
@@ -43,10 +43,6 @@ define borgbackup::configuration(
 
   if $ensure == 'absent' {
     file { "${conf_dir}/config.${title}":
-      ensure => 'absent'
-    }
-
-    file { "${conf_dir}/excludes.${title}":
       ensure => 'absent'
     }
 
@@ -113,11 +109,7 @@ define borgbackup::configuration(
     $_options = merge($default_options, $options)
 
     file { "${conf_dir}/config.${title}":
-      content => template('borgbackup/config.erb')
-    }
-
-    file { "${conf_dir}/excludes.${title}":
-      content => template('borgbackup/excludes.erb')
+      content => template('borgbackup/config.yaml.erb')
     }
 
     $env = [ "MAILTO=${job_mailto}", "PATH=/usr/bin:/bin:/usr/local/bin" ]
@@ -130,7 +122,7 @@ define borgbackup::configuration(
       cron { "borgbackup::configuration::${title}":
         user        => 'root',
         environment => unique(flatten([$env, $borg_env])),
-        command     => "${command} --config ${conf_dir}/config.${title} --excludes ${conf_dir}/excludes.${title} -v ${job_verbosity} > /tmp/borgbackup.log 2>&1 || cat /tmp/borgbackup.log",
+        command     => "${command} --config ${conf_dir}/config.${title} -v ${job_verbosity} > /tmp/borgbackup.log 2>&1 || cat /tmp/borgbackup.log",
         minute      => $job_schedule[minute],
         hour        => $job_schedule[hour],
         weekday     => $job_schedule[weekday],
