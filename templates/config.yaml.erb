@@ -14,6 +14,7 @@ storage:
   encryption_passphrase: <%= @passphrase %>
 <%- end -%>
   compression: <%= @_options['compression'] %>
+  umask: <%= @umask %>
 retention:
 <%- unless @_options['keep_within'] == :undef || ! @_options['keep_within'] -%>
   keep_within: <%= @_options['keep_within'] %>

@@ -4,6 +4,7 @@ define borgbackup::configuration(
   $repository         = undef,
   $type               = 'borg',
   $encryption         = 'none',
+  $umask              = '0027',
   $passphrase         = undef,
   $exclude_patterns   = [],
   $job_schedule       = {},
@@ -78,7 +79,7 @@ define borgbackup::configuration(
           path        => [ '/usr/bin', '/usr/local/bin'],
           environment => $exec_env,
           returns     => [ 0, 2],
-          command     => "borg init --encryption ${encryption} --lock-wait ${timeout} ${repository}",
+          command     => "borg init --umask ${umask} --encryption ${encryption} --lock-wait ${timeout} ${repository}",
           unless      => "borg list --lock-wait ${timeout} ${repository}"
         }
       }
