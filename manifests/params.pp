@@ -4,28 +4,28 @@
 # It sets variables according to platform.
 #
 class borgbackup::params {
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'Ubuntu': {
-      case $::operatingsystemrelease {
+      case $facts['os']['release']['major'] {
         '14.04': {
-          $package_name = [ 'python3-borgbackup', 'python3-atticmatic' ]
-          $configuration_directories = [ '/etc/atticmatic', '/etc/borgmatic']
+          $package_name              = ['python3-borgbackup', 'python3-atticmatic']
+          $configuration_directories = ['/etc/atticmatic', '/etc/borgmatic']
         }
         '16.04','18.04': {
-          $package_name = [ 'borgbackup', 'python3-borgmatic' ]
+          $package_name              = ['borgbackup', 'python3-borgmatic']
           $configuration_directories = '/etc/borgmatic'
         }
-        '20.04': {
-          $package_name = [ 'borgbackup', 'borgmatic' ]
+        '20.04','24.04': {
+          $package_name              = ['borgbackup', 'borgmatic']
           $configuration_directories = '/etc/borgmatic'
         }
         default: {
-          fail("Ubuntu ${::operatingsystemrelease} not supported")
+          fail("Ubuntu ${facts['os']['release']['major']} not supported")
         }
       }
     }
     default: {
-      fail("${::operatingsystem} not supported")
+      fail("${facts['os']['name']} not supported")
     }
   }
 }
