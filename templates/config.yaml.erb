@@ -5,10 +5,14 @@ location:
   <%- end -%>
   repositories:
     - <%= @repository %>
+<%- if Array(@exclude_patterns).empty? -%>
+  exclude_patterns: []
+<%- else -%>
   exclude_patterns:
   <%- Array(@exclude_patterns).each do |exclude_pattern| -%>
     - '<%= exclude_pattern %>'
   <%- end -%>
+<%- end -%>
 storage:
 <%- if @passphrase -%>
   encryption_passphrase: <%= @passphrase %>
