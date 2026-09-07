@@ -113,6 +113,22 @@ describe 'borgbackup::configuration' do
 	          :mode   => '0644'
 	        ) }
 
+          it { is_expected.to contain_file('/etc/borgmatic/config.filesystem').with_content(
+            /exclude_patterns: \[\]/
+          ) }
+
+          context "and with exclude_patterns => [ '/home/a', '/home/b' ]" do
+            let(:params) do
+              default_params.merge(
+                :exclude_patterns => ['/home/a', '/home/b']
+              )
+            end
+
+            it { is_expected.to contain_file('/etc/borgmatic/config.filesystem').with_content(
+              /exclude_patterns:\n    - '\/home\/a'\n    - '\/home\/b'/
+            ) }
+          end
+
 	        it { is_expected.to contain_file('/etc/borgmatic/config.filesystem').with_content(
             /\[location\]\nsource_directories: \/home\nrepository: \/mnt\/backup\n\n/
 	        ) }
